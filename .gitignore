@@ -1,2 +1,8 @@
 .DS_Store
+.vs
+.gitignore
 node_modules
+ProjectSettings.json
+slnx.sqlite
+VSWorkspaceState.json
+.suo

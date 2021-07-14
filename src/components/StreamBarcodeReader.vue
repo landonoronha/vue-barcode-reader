@@ -1,9 +1,9 @@
 <template>
     <div class="scanner-container">
-        <div v-show="!isLoading">
+        <div v-show="!isLoading && !stop">
             <video poster="data:image/gif,AAAA" ref="scanner"></video>
             <div class="overlay-element"></div>
-            <div class="laser"></div>
+            <div  class="laser"></div>
         </div>
     </div>
 </template>
@@ -13,7 +13,7 @@ import { BrowserMultiFormatReader, Exception } from "@zxing/library";
 
 export default {
     name: "stream-barcode-reader",
-
+    props: {stop: {type: Boolean, default: false}},
     data() {
         return {
             isLoading: true,
@@ -39,7 +39,7 @@ export default {
     },
 
     beforeDestroy() {
-        this.codeReader.reset();
+        this.stopScanner();
     },
 
     methods: {
@@ -53,6 +53,18 @@ export default {
                     }
                 }
             );
+        },
+        stopScanner()   {
+            this.codeReader.stopStreams();
+            this.codeReader.reset();
+        }
+    },
+    watch: {
+        stop: function (val) {
+            if (val===true)
+                this.codeReader.reset();
+            else
+                this.start();
         }
     }
 };
